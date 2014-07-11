@@ -1,0 +1,20 @@
+{
+  "name": "knayi_updater",
+  "version": "0.0.1",
+  "description": "Knayi Myanmar News Updater for every 10 second",
+  "private": false,
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "knayi-myscript": "*",
+    "fbgraph": "*",
+    "mongoose": "~3.8.12"
+  },
+  "devDependenices": {
+    "nodemon": "*"
+  },
+  "author": "greenlikeorange",
+  "license": "MIT",
+  "homepage": "https://github.com/greenlikeorange/knayi-myscript"
+}
