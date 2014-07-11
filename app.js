@@ -3,6 +3,11 @@ var knayi = require("knayi-myscript");
 var mongo = require("mongoose");
 var https = require("https");
 
+// access tooks
+var access_token = "";
+var app_id = "";
+var app_secret = "";
+
 mongo.connect("mongodb://localhost/knayi_updater");
 
 var PagesSchema = new mongo.Schema({
@@ -36,7 +41,7 @@ Pages.find({page_id: "267077651421"}, function(err, docs){
 
 
 // Access Took
-graph.setAccessToken("Knayi Access Took");
+graph.setAccessToken(access_token);
 					 
 var cangot = "link picture name caption description place tags".split(" ");
 
@@ -86,12 +91,24 @@ function update(page){
 
 };
 
-// 10 second loop
+//10 second loop
 setInterval(function(){
+
 	Pages.find({}, function(err, doc){
 		for (var i = 0; i < doc.length; i++) {
 			update(doc[i]);
 		};
-	});	
+	});
 }, 10000);
-	
+
+// Extand access too every 3hours
+setInterval(function(){
+	// Extned access took
+	graph.extendAccessToken({
+        "access_token":    access_token
+      , "client_id":      app_id
+      , "client_secret":  app_secret
+    }, function (err, facebookRes) {
+       access_token = facebookRes.access_token;
+    });
+}, 3*3600*1000);
