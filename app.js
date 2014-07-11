@@ -13,21 +13,27 @@ var PagesSchema = new mongo.Schema({
 }),
 	Pages = mongo.model('Pages', PagesSchema);
 
-Pages.remove(function(err){
-	// Clear Database for restart	
+// Create data base if there is no record
+Pages.find({page_id: "103865773008399"}, function(err, docs){
+	console.log(docs);
+	if( docs.length === 0 ){
+		new Pages({name: "7Day News Journal", page_id: "103865773008399",lastPost: ""}).save(function(err){ });
+	}
 });
 
-new Pages({
-	name: "7Day News Journal", page_id: "103865773008399",lastPost: ""
-}).save(function(err){ });
+Pages.find({page_id: "114803668557265"}, function(err, docs){
+	console.log(docs);
+	if( docs.length === 0 ){
+		new Pages({name: "Eleven Media Group", page_id: "114803668557265",lastPost: ""}).save(function(err){ });
+	}
+});
 
-new Pages({
-	name: "Eleven Media Group", page_id: "114803668557265",lastPost: ""
-}).save(function(err){ });
-
-new Pages({
-	name: "Internet Journal", page_id: "267077651421",lastPost: ""
-}).save(function(err){ });
+Pages.find({page_id: "267077651421"}, function(err, docs){
+	console.log(docs);
+	if( docs.length === 0 ){
+		new Pages({name: "Internet Journal", page_id: "267077651421",lastPost: ""}).save(function(err){ });
+	}
+});
 
 // Access Took
 graph.setAccessToken("{Knayi Updater Access Took}");
