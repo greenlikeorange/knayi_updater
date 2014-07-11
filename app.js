@@ -3,7 +3,6 @@ var knayi = require("knayi-myscript");
 var mongo = require("mongoose");
 var https = require("https");
 
-// Use mongodb to record latest
 mongo.connect("mongodb://localhost/knayi_updater");
 
 var PagesSchema = new mongo.Schema({
@@ -35,19 +34,20 @@ Pages.find({page_id: "267077651421"}, function(err, docs){
 	}
 });
 
-// Access Took
-graph.setAccessToken("{Knayi Updater Access Took}");
 
+// Access Took
+graph.setAccessToken("Knayi Access Took");
+					 
 var cangot = "link picture name caption description place tags".split(" ");
 
 function update(page){
 
-	console.log(page.lastPost);
 	graph.get( page.page_id + "/posts?limit=1" + page.lastPost, function(err, res) {
 		
+
 		if( err ) { 
 			console.error(err);
-		} else if( res.data.length === 0 ){
+		} else if( !res.data[0] ){
 			console.log("Already up to date");
 		} else {
 
@@ -55,7 +55,6 @@ function update(page){
 			var message = knayi(res.data[0].message).fontConvert().syllbreak();
 			var repost = {}; var i = 0;
 
-			// Add footer
 			message += "\n\n\nFrom: " + page.name + "\n" + "Post: http://fb.com/" + res.data[0].id;
 			repost.message = message;
 
@@ -65,6 +64,10 @@ function update(page){
 				}
 			};
 
+			// Resetting Last Post
+			Pages.update({name: page.name}, {name: page.name, page_id: page.page_id, lastPost: "&"+lastPost}, function(err){
+				
+			});
 			graph.post("181633308558166/feed",
 				repost,
 				function(err){
@@ -72,8 +75,7 @@ function update(page){
 				if( err ) { 
 					console.error(err);
 				}else {
-					// Resetting Last Post
-					Pages.update({name: page.name}, {name: page.name, page_id: page.page_id, lastPost: lastPost}, function(err){});
+					console.log("update posted");
 				}
 
 			});
@@ -92,3 +94,4 @@ setInterval(function(){
 		};
 	});	
 }, 10000);
+	
